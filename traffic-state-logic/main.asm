@@ -70,7 +70,7 @@ ldi temp, ((WGM>> 2) << WGM12)|(PRESCALE << CS10)
 sts TCCR1B, temp 
 
 
-; ENDERE�O DOS ESTADOS
+; ENDEREcO DOS ESTADOS
 ldi ZL, low(estado*2)
 ldi ZH, high(estado*2)
 
