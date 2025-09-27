@@ -1,0 +1,42 @@
+<ASSEMBLER_INFO>
+ <VERSION>2.2.8</VERSION>
+ <DEVICE>"ATmega328P"</DEVICE>
+ <WORKING_DIR>c:\users\marlo\Documents\Atmel Studio\7.0\semaforos-code\semaforos-code\Debug</WORKING_DIR>
+ <INCLUDE_PATH>
+  <DIR>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc</DIR>
+  <DIR>C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avrassembler\Include</DIR>
+  <DIR></DIR>
+ </INCLUDE_PATH>
+ <SOURCE_FILE>c:\users\marlo\Documents\Atmel Studio\7.0\semaforos-code\semaforos-code\main.asm</SOURCE_FILE>
+ <INCLUDED_FILES>
+  <FILE>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m328Pdef.inc</FILE>
+  <FILE>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m328pdef.inc</FILE>
+ </INCLUDED_FILES>
+ <OBJECT_FILES>
+  <FILE>c:\users\marlo\Documents\Atmel Studio\7.0\semaforos-code\semaforos-code\Debug\semaforos-code.obj</FILE>
+ </OBJECT_FILES>
+ <HEX_FILES>
+  <FILE>semaforos-code.hex</FILE>
+ </HEX_FILES>
+ <OUTPUT_FILES>
+  <FILE>semaforos-code.map</FILE>
+  <FILE>semaforos-code.lss</FILE>
+ </OUTPUT_FILES>
+ <LABELS>
+  <reset><FILE>c:\users\marlo\Documents\Atmel Studio\7.0\semaforos-code\semaforos-code\main.asm</FILE><LINE>27</LINE></reset>
+  <OCI1A_Interrupt><FILE>c:\users\marlo\Documents\Atmel Studio\7.0\semaforos-code\semaforos-code\main.asm</FILE><LINE>15</LINE></OCI1A_Interrupt>
+  <estado><FILE>c:\users\marlo\Documents\Atmel Studio\7.0\semaforos-code\semaforos-code\main.asm</FILE><LINE>68</LINE></estado>
+  <main_loop><FILE>c:\users\marlo\Documents\Atmel Studio\7.0\semaforos-code\semaforos-code\main.asm</FILE><LINE>137</LINE></main_loop>
+  <state_0><FILE>c:\users\marlo\Documents\Atmel Studio\7.0\semaforos-code\semaforos-code\main.asm</FILE><LINE>177</LINE></state_0>
+  <state_1><FILE>c:\users\marlo\Documents\Atmel Studio\7.0\semaforos-code\semaforos-code\main.asm</FILE><LINE>182</LINE></state_1>
+  <state_2><FILE>c:\users\marlo\Documents\Atmel Studio\7.0\semaforos-code\semaforos-code\main.asm</FILE><LINE>187</LINE></state_2>
+  <state_3><FILE>c:\users\marlo\Documents\Atmel Studio\7.0\semaforos-code\semaforos-code\main.asm</FILE><LINE>192</LINE></state_3>
+  <state_4><FILE>c:\users\marlo\Documents\Atmel Studio\7.0\semaforos-code\semaforos-code\main.asm</FILE><LINE>197</LINE></state_4>
+  <state_5><FILE>c:\users\marlo\Documents\Atmel Studio\7.0\semaforos-code\semaforos-code\main.asm</FILE><LINE>202</LINE></state_5>
+  <state_6><FILE>c:\users\marlo\Documents\Atmel Studio\7.0\semaforos-code\semaforos-code\main.asm</FILE><LINE>207</LINE></state_6>
+  <state_7><FILE>c:\users\marlo\Documents\Atmel Studio\7.0\semaforos-code\semaforos-code\main.asm</FILE><LINE>212</LINE></state_7>
+  <state_8><FILE>c:\users\marlo\Documents\Atmel Studio\7.0\semaforos-code\semaforos-code\main.asm</FILE><LINE>217</LINE></state_8>
+  <state_9><FILE>c:\users\marlo\Documents\Atmel Studio\7.0\semaforos-code\semaforos-code\main.asm</FILE><LINE>222</LINE></state_9>
+  <fiat><FILE>c:\users\marlo\Documents\Atmel Studio\7.0\semaforos-code\semaforos-code\main.asm</FILE><LINE>227</LINE></fiat>
+ </LABELS>
+</ASSEMBLER_INFO>

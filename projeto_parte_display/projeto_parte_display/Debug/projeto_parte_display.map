@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.8  C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm Tue Sep 23 14:13:55 2025
+AVRASM ver. 2.2.8  C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm Fri Sep 26 15:08:45 2025
 
 
 EQU  SIGNATURE_000 0000001e
@@ -695,12 +695,28 @@ EQU  ACIaddr      0000002e
 EQU  TWIaddr      00000030
 EQU  SPMRaddr     00000032
 EQU  INT_VECTORS_SIZE 00000034
+DEF  zero         r1
+DEF  units        r16
+DEF  tens         r18
+DEF  tmp          r19
+DEF  idx          r20
+EQU  NUM_STATES   0000000a
 EQU  ClockMHz     00000010
 EQU  DelayMs      00000005
-CSEG RESET        00000001
-CSEG send_units   00000007
-CSEG send_tens    0000000c
-CSEG alternate    0000000d
-CSEG delay1000ms  00000017
-CSEG counter      00000011
-CSEG delay_loop   0000001a
+EQU  PRESCALE     00000004
+EQU  PRESCALE_DIV 00000100
+EQU  TOP          00003d08
+CSEG RESET        00000017
+CSEG TIM1_COMPA   0000003b
+CSEG LoadState    0000005c
+CSEG send_units   00000031
+CSEG send_tens    00000036
+CSEG alternate    00000037
+CSEG delay1000ms  0000004a
+CSEG do_units_decrement 00000044
+CSEG call_next_state 00000046
+CSEG done_isr     00000047
+CSEG NextState    00000065
+CSEG delay_loop   0000004d
+CSEG states       00000052
+CSEG skip_idx_reset 00000069

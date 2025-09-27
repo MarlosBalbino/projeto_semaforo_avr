@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.8  C:\Users\marlo\Documents\Atmel Studio\7.0\timer_interrup\timer_interrup\main.asm Fri Sep 26 00:36:00 2025
+AVRASM ver. 2.2.8  c:\users\marlo\Documents\Atmel Studio\7.0\traffic-state-logic\traffic-state-logic\main.asm Thu Sep 25 10:24:44 2025
 
 
 EQU  SIGNATURE_000 0000001e
@@ -695,10 +695,16 @@ EQU  ACIaddr      0000002e
 EQU  TWIaddr      00000030
 EQU  SPMRaddr     00000032
 EQU  INT_VECTORS_SIZE 00000034
-DEF  tmp          r16
+DEF  temp         r20
+DEF  sema12       r21
+DEF  sema34       r23
+CSEG estado       00000000
+EQU  TAMANHO_ARRAY 00000014
+EQU  ENDERECO_FINAL 00000014
 EQU  PRESCALE     00000004
 EQU  PRESCALE_DIV 00000100
-EQU  TOP          00000410
-CSEG RESET        00000017
-CSEG TIM1_COMPA   0000002f
-CSEG loop         0000002e
+EQU  WGM          00000004
+EQU  TOP          0000f424
+CSEG main_loop    0000001f
+CSEG facaNada     0000002b
+CSEG resetEstados 00000032

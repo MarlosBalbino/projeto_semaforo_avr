@@ -1,10 +1,12 @@
 
-AVRASM ver. 2.2.8  C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm Tue Sep 23 14:13:55 2025
+AVRASM ver. 2.2.8  C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm Fri Sep 26 15:08:45 2025
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m328Pdef.inc'
+C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm(1): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m328pdef.inc'
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m328Pdef.inc'
+C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm(1): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m328pdef.inc'
                                  
-                                 .cseg 
+                                 .include "m328pdef.inc"
                                  
                                  ;***** Created: 2011-02-09 12:03 ******* Source: ATmega328P.xml **********
                                  ;*************************************************************************
@@ -985,73 +987,258 @@ AVRASM ver. 2.2.8  C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_displ
                                  
                                  ; ***** END OF FILE ******************************************************
                                  
+                                 
+                                 ;***** Created: 2011-02-09 12:03 ******* Source: ATmega328P.xml **********
+                                 ;*************************************************************************
+                                 ;* A P P L I C A T I O N   N O T E   F O R   T H E   A V R   F A M I L Y
+                                 ;* 
+                                 ;* Number            : AVR000
+                                 ;* File Name         : "m328Pdef.inc"
+                                 ;* Title             : Register/Bit Definitions for the ATmega328P
+                                 ;* Date              : 2011-02-09
+                                 ;* Version           : 2.35
+                                 ;* Support E-mail    : avr@atmel.com
+                                 ;* Target MCU        : ATmega328P
+                                 ;* 
+                                 ;* DESCRIPTION
+                                 ;* When including this file in the assembly program file, all I/O register 
+                                 ;* names and I/O register bit names appearing in the data book can be used.
+                                 ;* In addition, the six registers forming the three data pointers X, Y and 
+                                 ;* Z have been assigned names XL - ZH. Highest RAM address for Internal 
+                                 ;* SRAM is also defined 
+                                 ;* 
+                                 ;* The Register names are represented by their hexadecimal address.
+                                 ;* 
+                                 ;* The Register Bit names are represented by their bit number (0-7).
+                                 ;* 
+                                 ;* Please observe the difference in using the bit names with instructions
+                                 ;* such as "sbr"/"cbr" (set/clear bit in register) and "sbrs"/"sbrc"
+                                 ;* (skip if bit in register set/cleared). The following example illustrates
+                                 ;* this:
+                                 ;* 
+                                 ;* in    r16,PORTB             ;read PORTB latch
+                                 ;* sbr   r16,(1<<PB6)+(1<<PB5) ;set PB6 and PB5 (use masks, not bit#)
+                                 ;* out   PORTB,r16             ;output to PORTB
+                                 ;* 
+                                 ;* in    r16,TIFR              ;read the Timer Interrupt Flag Register
+                                 ;* sbrc  r16,TOV0              ;test the overflow flag (use bit#)
+                                 ;* rjmp  TOV0_is_set           ;jump if set
+                                 ;* ...                         ;otherwise do something else
+                                 ;*************************************************************************
+                                 
+                                 #ifndef _M328PDEF_INC_
+                                 #endif  /* _M328PDEF_INC_ */
+                                 
+                                 ; ***** END OF FILE ******************************************************
+                                 .list
+                                 
+                                 .def zero  = r1 
+                                 .def units = r16
+                                 .def tens  = r18
+                                 .def tmp   = r19
+                                 .def idx   = r20
+                                 
+                                 .equ NUM_STATES = 10
+                                 
+                                 .cseg 
                                  .org 0 
                                  
                                  .equ ClockMHz = 16
-                                 .equ DelayMs = 5
+                                 .equ DelayMs = 5 ; delay em milisegundos para rotina de delay
                                  
-000000 c000                      rjmp RESET 
+                                 #define CLOCK 16.0e6 ;clock speed
+                                 #define DELAY 0.25 ; delay em secondos para a interrupção de timer
+                                 
+                                 .equ PRESCALE = 0b100 ;/256 prescale8
+                                 .equ PRESCALE_DIV = 256
+                                 .equ TOP = int((CLOCK/PRESCALE_DIV)*DELAY - 1)
+                                 .if TOP > 65535
+                                 .endif
+                                 
+000000 c016                      rjmp RESET 
+                                 
+                                 .org OC1Aaddr
+000016 c024                      rjmp TIM1_COMPA
                                  
                                  RESET:
+000017 94f8                      	cli
+                                 
+000018 2411                      	clr zero          ; zera r1 (r1 deve ficar zero)
+000019 e040                          ldi idx, 0
+00001a d041                      	rcall LoadState
+                                 
+                                 	; ============== CONFIGURA AS PORTAS DE SAÍDA E OS VALORES INICIAIS ===================
                                  	; Ativa as portas B e D
-000001 ef0f                          ldi r16, 0b11111111 
-000002 b904                          out DDRB, r16
-000003 b90a                      	out DDRD, r16
+00001b ef3f                          ldi tmp, 0b11111111 
+00001c b934                          out DDRB, tmp
+00001d b93a                      	out DDRD, tmp
                                  
                                  	; Inicia o valores que serão mostrados no display
-000004 e022                      	ldi r18, 2
-000005 e004                          ldi r16, 4 
-000006 e011                      	ldi r17, 0b00000001 ; valor inicial da porta D
+                                 	; ldi tens, high(states*2)
+                                     ; ldi units, low(states*2)
+00001e e011                      	ldi r17, 0b00000001 ; valor inicial da porta D (ativar pino D0)
                                  
+                                 	; ============== CONFIGURA O TIMER ====================================================
+                                 	
+                                 	; OCR1A = 62499 (0xF423) para 1s
+00001f e33d                      	ldi tmp, high(TOP)
+000020 9330 0089                 	sts OCR1AH, tmp
+000022 e038                      	ldi tmp, low(TOP)
+000023 9330 0088                 	sts OCR1AL, tmp
+                                 
+                                 	; habilita interrupção Compare A
+000025 9130 006f                 	lds tmp, TIMSK1
+000027 6032                      	ori tmp, 1<<OCIE1A
+000028 9330 006f                 	sts TIMSK1, tmp
+                                 
+                                 	; Timer1: CTC, prescaler = 256
+00002a e030                      	ldi tmp, 0x00
+00002b 9330 0080                 	sts TCCR1A, tmp
+00002d e03c                      	ldi tmp, (1<<WGM12) | (1<<CS12)
+00002e 9330 0081                 	sts TCCR1B, tmp
+                                 
+000030 9478                      	sei
+                                 
+                                 	
                                  send_units:	
-000007 b91b                      	out PORTD, r17 ; Ativa o pino D0
+000031 b91b                      	out PORTD, r17 ; Ativa o pino D0
                                  
                                  	; Verifica o valor de r17 para controlar a saída
-000008 3011                      	cpi r17, 0b00000001
-000009 f411                      	brne send_tens
+                                 	; cpi r17, 0b00000001
+000032 3011                      	cpi r17, 0b00000001
+000033 f411                      	brne send_tens
                                  		
                                  	; Coloca o valor de r16 na porta B se r17 = 0b00000001, ou seja, se o pino D0 estiver ativo
-00000a b905                      	out PORTB, r16       
-00000b c001                      	rjmp alternate
+000034 b905                      	out PORTB, units       
+000035 c001                      	rjmp alternate
                                      
                                  	send_tens:
                                  		; Coloca o valor de r18 na porta B se r17 = 0b00000010	
-00000c b925                      		out PORTB, r18
+000036 b925                      		out PORTB, tens
                                  
                                  	alternate:
                                  		; Alterna ou valores de r17 entre 0b00000001 e 0b00000010. Ou seja, alterna entre os pinos D0 e D1
-00000d e033                      		ldi r19, 0b00000011
-00000e 2713                      		eor r17, r19  ; 01 XOR 03 = 02, 02 XOR 03 = 01
+000037 e033                      		ldi tmp, 0b00000011
+000038 2713                      		eor r17,tmp  ; 01 XOR 03 = 02, 02 XOR 03 = 01
                                  		
-00000f d007                      		rcall delay1000ms
+000039 d010                      		rcall delay1000ms
+00003a cff6                      		rjmp send_units
                                  
-000010 cff6                      		rjmp send_units
+                                 TIM1_COMPA:
+                                     ; --- salvar SREG (em r17) ---
+00003b b73f                          in   tmp, SREG
+00003c 933f                          push tmp
                                  
-                                 counter:
-                                     ; rcall delay1000ms
+                                     ; --- Checa se contador já está em 00: se sim, avança o estado ---
+00003d 3000                          cpi  units, 0
+00003e f429                          brne do_units_decrement      ; units != 0 -> faz decremento normal
+00003f 3020                          cpi  tens, 0
+000040 f029                          breq call_next_state   ; units==0 && tens==0 -> carregar próxima entrada
                                  
-000011 9503                          inc r16  ; Incrementa o índice da tabela
-                                     
-                                     ; Verifica se r16 > 9 (0-9 são 10 valores)
-000012 300a                          cpi r16, 10
-000013 f3e8                          brlo counter ; Se menor que 10, continua no loop
-                                     
-                                     ; Se chegou a 10:
-000014 e000                          ldi r16, 0 ; reseta r16 para 0
-000015 9523                      	inc r18    ; incrementa r18
-000016 cffa                          rjmp counter
+                                     ; --- units == 0 e tens > 0: pega "borrow" e decrementa tens ---
+000041 e009                          ldi  units, 9
+000042 952a                          dec  tens
+000043 c003                          rjmp done_isr
                                  
-                                 ; --- Sub-rotina de delay (1000ms) ---
+                                 do_units_decrement:
+000044 950a                          dec  units
+000045 c001                          rjmp done_isr
+                                 
+                                 call_next_state:
+                                     ; --- Preservar regs que NextState / LoadState usarão (r30:r31 e tmp=r19) ---
+                                     ;push r30
+                                     ;push r31
+                                     ;push tmp        ; tmp = r19
+                                 
+                                     ; chama NextState (incrementa idx, faz LoadState -> coloca tens/units em r18/r16)
+000046 d01e                          rcall NextState
+                                 
+                                     ; --- restaurar r19, r31, r30 ---
+                                     ;pop  tmp
+                                     ;pop  r31
+                                     ;pop  r30
+                                 
+                                 done_isr:
+                                     ; --- restaurar SREG e sair da ISR ---
+000047 913f                          pop  tmp
+000048 bf3f                          out  SREG, tmp
+000049 9518                          reti
+                                 
+                                 
+                                 ; --- Sub-rotina de delay ---
                                  delay1000ms:
-000017 e060                          ldi r22, byte3(ClockMHz * 1000 * DelayMs / 5)
-000018 e35e                          ldi r21, high(ClockMHz * 1000 * DelayMs / 5)
-000019 e840                          ldi r20, low(ClockMHz * 1000 * DelayMs / 5)
+00004a e060                          ldi r22, byte3(ClockMHz * 1000 * DelayMs / 5)
+00004b e35e                          ldi r21, high(ClockMHz * 1000 * DelayMs / 5)
+00004c e890                          ldi r25, low(ClockMHz * 1000 * DelayMs / 5)
                                  
                                  delay_loop:
-00001a 5041                          subi r20, 1
-00001b 4050                          sbci r21, 0
-00001c 4060                          sbci r22, 0
-00001d f7e0                          brcc delay_loop
+00004d 5091                          subi r25, 1
+00004e 4050                          sbci r21, 0
+00004f 4060                          sbci r22, 0
+000050 f7e0                          brcc delay_loop
+000051 9508                          ret
+                                 
+                                 
+                                 
+                                 
+                                 
+                                 
+                                 
+                                 
+                                 
+                                 
+                                 ; tabela com tempos apenas (por enquanto)
+                                 /*states: ; unidades dezenas
+                                     .db 0x06, 0x00 
+                                     .db 0x00, 0x04  
+                                     .db 0x02, 0x03  
+                                     .db 0x00, 0x04  
+                                 	.db 0x02, 0x00 
+                                 	.db 0x00, 0x03
+                                 	.db 0x02, 0x01
+                                 	.db 0x00, 0x01
+                                 	.db 0x00, 0x03
+                                 	.db 0x00, 0x01*/
+                                 
+                                 states: ; unidades dezenas
+000052 0006                          .db 6, 0 
+000053 0400                          .db 0, 4  
+000054 0302                          .db 2, 3  
+000055 0400                          .db 0, 4  
+000056 0002                      	.db 2, 0 
+000057 0300                      	.db 0, 3
+000058 0102                      	.db 2, 1
+000059 0100                      	.db 0, 1
+00005a 0300                      	.db 0, 3
+00005b 0100                      	.db 0, 1
+                                     
+                                 
+                                 
+                                 LoadState:
+                                     ; calcula endereço base states + idx*2 e posiciona Z
+00005c eae4                          ldi ZL, low(states*2)      ; Z low
+00005d e0f0                          ldi ZH, high(states*2)     ; Z high
+                                 
+00005e 2f34                          mov tmp, idx
+00005f 0f33                          lsl tmp                   ; tmp = idx * 2 (multiplica por 2)
+                                     ; tmp é 8-bit; se NUM_STATES*2 <= 255, isso basta. Para tabelas maiores, usar 16-bit mult.
+000060 0fe3                          add ZL, tmp
+000061 1df1                          adc ZH, zero             ; zero deve ser r1=0
+                                 
+                                     ; lê tens e units da flash
+000062 9125                          lpm tens, Z+              ; lê primeira byte (tens), Z <- Z + 1
+000063 9104                          lpm units, Z              ; lê segunda byte (units)
+                                 
+000064 9508                          ret
+                                 
+                                 
+                                 NextState:
+000065 9543                          inc idx
+000066 304a                          cpi idx, NUM_STATES
+000067 f008                          brlo skip_idx_reset
+000068 e040                          ldi idx, 0
+                                 skip_idx_reset:
+000069 dff2                          rcall LoadState
 
 
 RESOURCE USE INFORMATION
@@ -1069,39 +1256,39 @@ counted separately from r26..r31 here.
 .dseg memory usage only counts static data declared with .byte
 
 "ATmega328P" register use summary:
-x  :   0 y  :   0 z  :   0 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 
+x  :   0 y  :   0 z  :   2 r0 :   0 r1 :   2 r2 :   0 r3 :   0 r4 :   0 
 r5 :   0 r6 :   0 r7 :   0 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 
-r13:   0 r14:   0 r15:   0 r16:   8 r17:   4 r18:   3 r19:   2 r20:   2 
-r21:   2 r22:   2 r23:   0 r24:   0 r25:   0 r26:   0 r27:   0 r28:   0 
-r29:   0 r30:   0 r31:   0 
-Registers used: 7 out of 35 (20.0%)
+r13:   0 r14:   0 r15:   0 r16:   5 r17:   4 r18:   4 r19:  23 r20:   5 
+r21:   2 r22:   2 r23:   0 r24:   0 r25:   2 r26:   0 r27:   0 r28:   0 
+r29:   0 r30:   2 r31:   2 
+Registers used: 12 out of 35 (34.3%)
 
 "ATmega328P" instruction use summary:
-.lds  :   0 .sts  :   0 adc   :   0 add   :   0 adiw  :   0 and   :   0 
+.lds  :   0 .sts  :   0 adc   :   1 add   :   1 adiw  :   0 and   :   0 
 andi  :   0 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
-brcc  :   1 brcs  :   0 break :   0 breq  :   0 brge  :   0 brhc  :   0 
+brcc  :   1 brcs  :   0 break :   0 breq  :   1 brge  :   0 brhc  :   0 
 brhs  :   0 brid  :   0 brie  :   0 brlo  :   1 brlt  :   0 brmi  :   0 
-brne  :   1 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
+brne  :   2 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
 brvs  :   0 bset  :   0 bst   :   0 call  :   0 cbi   :   0 cbr   :   0 
-clc   :   0 clh   :   0 cli   :   0 cln   :   0 clr   :   0 cls   :   0 
+clc   :   0 clh   :   0 cli   :   1 cln   :   0 clr   :   1 cls   :   0 
 clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   0 cpc   :   0 
-cpi   :   2 cpse  :   0 dec   :   0 eor   :   1 fmul  :   0 fmuls :   0 
-fmulsu:   0 icall :   0 ijmp  :   0 in    :   0 inc   :   2 jmp   :   0 
-ld    :   0 ldd   :   0 ldi   :   9 lds   :   0 lpm   :   0 lsl   :   0 
-lsr   :   0 mov   :   0 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
-neg   :   0 nop   :   0 or    :   0 ori   :   0 out   :   5 pop   :   0 
-push  :   0 rcall :   1 ret   :   1 reti  :   0 rjmp  :   4 rol   :   0 
+cpi   :   4 cpse  :   0 dec   :   2 eor   :   1 fmul  :   0 fmuls :   0 
+fmulsu:   0 icall :   0 ijmp  :   0 in    :   1 inc   :   1 jmp   :   0 
+ld    :   0 ldd   :   0 ldi   :  15 lds   :   1 lpm   :   3 lsl   :   1 
+lsr   :   0 mov   :   1 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
+neg   :   0 nop   :   0 or    :   0 ori   :   1 out   :   6 pop   :   1 
+push  :   1 rcall :   4 ret   :   3 reti  :   1 rjmp  :   6 rol   :   0 
 ror   :   0 sbc   :   0 sbci  :   2 sbi   :   0 sbic  :   0 sbis  :   0 
 sbiw  :   0 sbr   :   0 sbrc  :   0 sbrs  :   0 sec   :   0 seh   :   0 
-sei   :   0 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
-sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :   0 
+sei   :   1 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
+sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :   5 
 sub   :   0 subi  :   1 swap  :   0 tst   :   0 wdr   :   0 
-Instructions used: 13 out of 113 (11.5%)
+Instructions used: 30 out of 113 (26.5%)
 
 "ATmega328P" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x00003e     62      0     62   32768   0.2%
+[.cseg] 0x000000 0x0000d6    152     20    172   32768   0.5%
 [.dseg] 0x000100 0x000100      0      0      0    2048   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 

@@ -2,7 +2,7 @@
 .org 0 
 
 .equ ClockMHz = 16
-.equ DelayMs = 5
+.equ DelayMs = 100
 
 rjmp RESET 
 
@@ -17,8 +17,9 @@ RESET:
     ldi r16, 4  
 	ldi r17, 0b00000001 ; valor inicial da porta D
 
-counter:
-	send:	
+
+
+send:	
 		out PORTD, r17 ; Ativa o pino D0
 
 		; Verifica o valor de r17 para controlar a saída
@@ -42,6 +43,7 @@ counter:
 
 		rjmp send
 
+counter:
     ; rcall delay1000ms
 
     inc r16  ; Incrementa o índice da tabela

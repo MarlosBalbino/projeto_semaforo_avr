@@ -1,12 +1,12 @@
 
-AVRASM ver. 2.2.8  C:\Users\marlo\Documents\Atmel Studio\7.0\timer_interrup\timer_interrup\main.asm Fri Sep 26 00:36:00 2025
+AVRASM ver. 2.2.8  c:\users\marlo\Documents\Atmel Studio\7.0\traffic-state-logic\traffic-state-logic\main.asm Thu Sep 25 10:24:44 2025
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m328Pdef.inc'
-C:\Users\marlo\Documents\Atmel Studio\7.0\timer_interrup\timer_interrup\main.asm(1): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m328pdef.inc'
+c:\users\marlo\Documents\Atmel Studio\7.0\traffic-state-logic\traffic-state-logic\main.asm(5): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m328pdef.inc'
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m328Pdef.inc'
-C:\Users\marlo\Documents\Atmel Studio\7.0\timer_interrup\timer_interrup\main.asm(1): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m328pdef.inc'
+c:\users\marlo\Documents\Atmel Studio\7.0\traffic-state-logic\traffic-state-logic\main.asm(5): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m328pdef.inc'
                                  
-                                 .include "m328pdef.inc"
+                                 ;
                                  
                                  ;***** Created: 2011-02-09 12:03 ******* Source: ATmega328P.xml **********
                                  ;*************************************************************************
@@ -987,6 +987,10 @@ C:\Users\marlo\Documents\Atmel Studio\7.0\timer_interrup\timer_interrup\main.asm
                                  
                                  ; ***** END OF FILE ******************************************************
                                  
+                                 ; led.asm
+                                 
+                                 ; ----- SETUP -----
+                                 .include "m328pdef.inc"
                                  
                                  ;***** Created: 2011-02-09 12:03 ******* Source: ATmega328P.xml **********
                                  ;*************************************************************************
@@ -1030,76 +1034,128 @@ C:\Users\marlo\Documents\Atmel Studio\7.0\timer_interrup\timer_interrup\main.asm
                                  #endif  /* _M328PDEF_INC_ */
                                  
                                  ; ***** END OF FILE ******************************************************
-                                 .list
-                                 .def tmp = r16
+                                 
                                  .cseg
-                                 .org 0x0000
+                                 .org 	0x00
+                                 
+                                 ; NOMEAR SEMaFOROS
+                                 .def temp = r20 
+                                 .def sema12 = r21 ; semaforo 1 e 2
+                                 .def sema34 = r23 ; semaforo 3 e 4
+                                 
+                                 
+                                 
+                                 
+                                 ; ARMAZENAR ESTADOS
+                                 ; semaforos 1 e 2
+                                 ;estados12: .db 0x0C,0x0C,0x0C,0x14, 0x24, 0x24, 0x21, 0x22,0x22,0x0C
+                                 ;estados34: .db 0x0C,0x14,0x24,0x24, 0x24, 0x21, 0x21, 0x21, 0x22, 0x22
+                                 
+                                 estado:
+000000 0c0c                        .dw 0x0C0C
+000001 140c                        .dw 0x140C
+000002 240c                        .dw 0x240C
+000003 2414                        .dw 0x2414
+000004 2424                        .dw 0x2424
+000005 2124                        .dw 0x2124
+000006 2121                        .dw 0x2121
+000007 2122                        .dw 0x2122
+000008 2222                        .dw 0x2222
+000009 220c                        .dw 0x220C
+                                 
+                                 .equ TAMANHO_ARRAY = 20; bytes ou 10 posiï¿½ï¿½es de elementos de 2 bytes cada
+                                 .equ ENDERECO_FINAL = estado + TAMANHO_ARRAY
+                                 
+                                 ; INICIALIZAR STACK
+                                 
+00000a ef4f                      ldi temp, low(RAMEND)
+00000b bf4d                      out SPL, temp
+00000c e048                      ldi temp, high(RAMEND)
+00000d bf4e                      out SPH, temp
+                                 
+                                 ; SETAR OS PINOS DOS SEMAFOROS COMO SAIDA
+00000e ef4f                      ldi temp, 255 ; 0b1111111 - constante para setar os pinos como saida
+00000f b944                      out  DDRB,temp		
+000010 b947                      out  DDRC,temp	
+                                 
+                                 ; CONFIGURAR O DELAY
                                  
                                  #define CLOCK 16.0e6 ;clock speed
-                                 #define TIMES_PER_SEC 60
-                                 #define DELAY 1/TIMES_PER_SEC ;seconds
-                                 ;#define DELAY 1 ; seconds
-                                 
-                                 .equ PRESCALE = 0b100 ;/256 prescale8
+                                 #define DELAY 1 ;seconds
+                                 .equ PRESCALE = 0b100 ;/256 prescale
                                  .equ PRESCALE_DIV = 256
-                                 .equ TOP = int((CLOCK/PRESCALE_DIV)*DELAY - 1)
+                                 .equ WGM = 0b0100 ;Waveform generation mode: CTC - you must ensure this value is between 0 and 65535
+                                 .equ TOP = int(0.5 + ((CLOCK/PRESCALE_DIV)*DELAY))
                                  .if TOP > 65535
                                  .endif
                                  
-000000 c016                      rjmp RESET
-                                 
-                                 ; Vetor de interrupção para Timer1 Compare A
-                                 .org OC1Aaddr
-000016 c018                      rjmp TIM1_COMPA
-                                 
-                                 RESET:
-000017 94f8                      	cli
-                                 
-                                 	; PB5 saída (LED)
-000018 e200                      	ldi tmp, (1<<DDB5)	
-000019 b904                      	out DDRB, tmp
-00001a e000                      	ldi tmp, 0x00
-00001b b905                      	out PORTB, tmp
-                                 
-                                 	; Timer1: CTC, prescaler = 256
-00001c e000                      	ldi tmp, 0x00
-00001d 9300 0080                 	sts TCCR1A, tmp
-00001f e00c                      	ldi tmp, (1<<WGM12) | (1<<CS12)
-000020 9300 0081                 	sts TCCR1B, tmp
-                                 
-                                 	; OCR1A = 62499 (0xF423) para 1s
-000022 e004                      	ldi tmp, high(TOP)
-000023 9300 0089                 	sts OCR1AH, tmp
-000025 e100                      	ldi tmp, low(TOP)
-000026 9300 0088                 	sts OCR1AL, tmp
+                                 ; AJUSTES FINAIS NO TIMER
+000011 ef44                      ldi temp, high(TOP) 
+000012 9340 0089                 sts OCR1AH, temp
+000014 e244                      ldi temp, low(TOP)
+000015 9340 0088                 sts OCR1AL, temp
+000017 e040                      ldi temp, ((WGM&0b11) << WGM10) 
+000018 9340 0080                 sts TCCR1A, temp
+00001a e04c                      ldi temp, ((WGM>> 2) << WGM12)|(PRESCALE << CS10)
+00001b 9340 0081                 sts TCCR1B, temp 
                                  
                                  
-                                 	; habilita interrupção Compare A
-000028 9100 006f                 	lds r16, TIMSK1
-00002a 6002                      	ori r16, 1 <<OCIE1A
-00002b 9300 006f                 	sts TIMSK1, r16
+                                 ; ENDEREcO DOS ESTADOS
+00001d e0e0                      ldi ZL, low(estado*2)
+00001e e0f0                      ldi ZH, high(estado*2)
                                  
-00002d 9478                      	sei
                                  
-                                 loop:
-00002e cfff                      	rjmp loop
+                                 ; --- MAIN LOOP ---
+                                 main_loop:
                                  
-                                 ; ISR: Timer1 Compare A Match
-                                 TIM1_COMPA:
-00002f 930f                      	push r16
-000030 931f                      	push r17
-000031 b70f                      	in r16, SREG
-000032 930f                      	push r16
+00001f b346                      in temp, TIFR1
+000020 7042                      andi temp, 1<<OCF1A 
+                                 ; andi --> 1 (OCF1A ï¿½ um)	--> overflow - Jï¿½ PASSOU delay SEGUNDOS!
+                                 ; andi --> 0 (OCF1A ï¿½ zero)	--> contando - ainda tï¿½ contando
+000021 f049                      breq facaNada ; veja se os 2 sï¿½o zero. se sim, ainda estï¿½ contando.
                                  
-000033 b105                      	in r16, PORTB
-000034 e210                      	ldi r17, (1<<PORTB5)
-000035 2701                      	eor r16, r17
-000036 b905                      	out PORTB, r16
+                                 ; chegou aqui? o tempo jï¿½ deu! reset a bandeira 
+000022 e042                      ldi temp, 1<<OCF1A ;write a 1 to clear the flag
+000023 bb46                      out TIFR1, temp ; com estï¿½ no modo CTC, o registrador do temporizador, TCNT1, ï¿½ zerado
                                  
-000037 910f                      	pop r16
-000038 bf0f                      	out SREG, r16
-000039 911f                      	pop r17
-00003a 910f                      	pop r16
+                                 
+                                 
+                                 ; overflow
+                                 
+000024 9632                      adiw Z, 2
+                                 
+                                 
+000025 e040                      ldi temp, high(ENDERECO_FINAL)
+000026 13f4                      cpse ZH, temp
+000027 c00a                      rjmp resetEstados
+                                 
+000028 e144                      ldi temp, low(ENDERECO_FINAL)
+000029 17e4                      cp ZL, temp
+00002a f438                      brsh resetEstados
+                                 
+                                 
+                                 
+                                 facaNada:
+                                 	; ------ MAIN ----
+00002b 9155                      	lpm sema12, Z+ ;JA VAI PARA O PROXIMO
+00002c b955                      	out PORTB,sema12
+                                 
+00002d 9174                      	lpm sema34, Z
+00002e b978                      	out PORTC,sema34
+                                 
+                                 	; Para fazer Z voltar ao LSB do elemento que ele acabou de ler:
+00002f 50e1                      	subi ZL, 1       ; Decrementa ZL em 1
+000030 40f0                      	sbci ZH, 0       ; Decrementa ZH em 0 com carry (se ZL "emprestou")
+                                 
+000031 cfed                      	rjmp main_loop
+                                 
+                                 resetEstados:
+000032 e0e0                      	ldi ZL, low(estado*2)
+000033 e0f0                      	ldi ZH, high(estado*2)
+                                 
+000034 cff6                      	rjmp facaNada
+                                 
+                                 
 
 
 RESOURCE USE INFORMATION
@@ -1117,39 +1173,39 @@ counted separately from r26..r31 here.
 .dseg memory usage only counts static data declared with .byte
 
 "ATmega328P" register use summary:
-x  :   0 y  :   0 z  :   0 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 
+x  :   0 y  :   0 z  :   3 r0 :   0 r1 :   0 r2 :   0 r3 :   0 r4 :   0 
 r5 :   0 r6 :   0 r7 :   0 r8 :   0 r9 :   0 r10:   0 r11:   0 r12:   0 
-r13:   0 r14:   0 r15:   0 r16:  24 r17:   4 r18:   0 r19:   0 r20:   0 
-r21:   0 r22:   0 r23:   0 r24:   0 r25:   0 r26:   0 r27:   0 r28:   0 
-r29:   0 r30:   0 r31:   0 
-Registers used: 2 out of 35 (5.7%)
+r13:   0 r14:   0 r15:   0 r16:   0 r17:   0 r18:   0 r19:   0 r20:  23 
+r21:   2 r22:   0 r23:   2 r24:   0 r25:   0 r26:   0 r27:   0 r28:   0 
+r29:   0 r30:   4 r31:   4 
+Registers used: 6 out of 35 (17.1%)
 
 "ATmega328P" instruction use summary:
-.lds  :   0 .sts  :   0 adc   :   0 add   :   0 adiw  :   0 and   :   0 
-andi  :   0 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
-brcc  :   0 brcs  :   0 break :   0 breq  :   0 brge  :   0 brhc  :   0 
+.lds  :   0 .sts  :   0 adc   :   0 add   :   0 adiw  :   1 and   :   0 
+andi  :   1 asr   :   0 bclr  :   0 bld   :   0 brbc  :   0 brbs  :   0 
+brcc  :   0 brcs  :   0 break :   0 breq  :   1 brge  :   0 brhc  :   0 
 brhs  :   0 brid  :   0 brie  :   0 brlo  :   0 brlt  :   0 brmi  :   0 
-brne  :   0 brpl  :   0 brsh  :   0 brtc  :   0 brts  :   0 brvc  :   0 
+brne  :   0 brpl  :   0 brsh  :   1 brtc  :   0 brts  :   0 brvc  :   0 
 brvs  :   0 bset  :   0 bst   :   0 call  :   0 cbi   :   0 cbr   :   0 
-clc   :   0 clh   :   0 cli   :   1 cln   :   0 clr   :   0 cls   :   0 
-clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   0 cpc   :   0 
-cpi   :   0 cpse  :   0 dec   :   0 eor   :   1 fmul  :   0 fmuls :   0 
-fmulsu:   0 icall :   0 ijmp  :   0 in    :   2 inc   :   0 jmp   :   0 
-ld    :   0 ldd   :   0 ldi   :   7 lds   :   1 lpm   :   0 lsl   :   0 
+clc   :   0 clh   :   0 cli   :   0 cln   :   0 clr   :   0 cls   :   0 
+clt   :   0 clv   :   0 clz   :   0 com   :   0 cp    :   1 cpc   :   0 
+cpi   :   0 cpse  :   1 dec   :   0 eor   :   0 fmul  :   0 fmuls :   0 
+fmulsu:   0 icall :   0 ijmp  :   0 in    :   1 inc   :   0 jmp   :   0 
+ld    :   0 ldd   :   0 ldi   :  14 lds   :   0 lpm   :   3 lsl   :   0 
 lsr   :   0 mov   :   0 movw  :   0 mul   :   0 muls  :   0 mulsu :   0 
-neg   :   0 nop   :   0 or    :   0 ori   :   1 out   :   4 pop   :   3 
-push  :   3 rcall :   0 ret   :   0 reti  :   1 rjmp  :   3 rol   :   0 
-ror   :   0 sbc   :   0 sbci  :   0 sbi   :   0 sbic  :   0 sbis  :   0 
+neg   :   0 nop   :   0 or    :   0 ori   :   0 out   :   7 pop   :   0 
+push  :   0 rcall :   0 ret   :   0 reti  :   0 rjmp  :   3 rol   :   0 
+ror   :   0 sbc   :   0 sbci  :   1 sbi   :   0 sbic  :   0 sbis  :   0 
 sbiw  :   0 sbr   :   0 sbrc  :   0 sbrs  :   0 sec   :   0 seh   :   0 
-sei   :   1 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
-sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :   5 
-sub   :   0 subi  :   0 swap  :   0 tst   :   0 wdr   :   0 
-Instructions used: 13 out of 113 (11.5%)
+sei   :   0 sen   :   0 ser   :   0 ses   :   0 set   :   0 sev   :   0 
+sez   :   0 sleep :   0 spm   :   0 st    :   0 std   :   0 sts   :   4 
+sub   :   0 subi  :   1 swap  :   0 tst   :   0 wdr   :   0 
+Instructions used: 14 out of 113 (12.4%)
 
 "ATmega328P" memory use summary [bytes]:
 Segment   Begin    End      Code   Data   Used    Size   Use%
 ---------------------------------------------------------------
-[.cseg] 0x000000 0x000078     78      0     78   32768   0.2%
+[.cseg] 0x000000 0x00006a     86     20    106   32768   0.3%
 [.dseg] 0x000100 0x000100      0      0      0    2048   0.0%
 [.eseg] 0x000000 0x000000      0      0      0    1024   0.0%
 

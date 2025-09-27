@@ -23,11 +23,11 @@
  </OUTPUT_FILES>
  <LABELS>
   <RESET><FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\2x7seg_counter_BCD\2x7seg_counter_BCD\main.asm</FILE><LINE>9</LINE></RESET>
-  <counter><FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\2x7seg_counter_BCD\2x7seg_counter_BCD\main.asm</FILE><LINE>20</LINE></counter>
-  <send><FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\2x7seg_counter_BCD\2x7seg_counter_BCD\main.asm</FILE><LINE>21</LINE></send>
-  <saida_portb><FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\2x7seg_counter_BCD\2x7seg_counter_BCD\main.asm</FILE><LINE>32</LINE></saida_portb>
-  <alternar><FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\2x7seg_counter_BCD\2x7seg_counter_BCD\main.asm</FILE><LINE>36</LINE></alternar>
-  <delay1000ms><FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\2x7seg_counter_BCD\2x7seg_counter_BCD\main.asm</FILE><LINE>59</LINE></delay1000ms>
-  <delay_loop><FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\2x7seg_counter_BCD\2x7seg_counter_BCD\main.asm</FILE><LINE>64</LINE></delay_loop>
+  <send><FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\2x7seg_counter_BCD\2x7seg_counter_BCD\main.asm</FILE><LINE>22</LINE></send>
+  <saida_portb><FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\2x7seg_counter_BCD\2x7seg_counter_BCD\main.asm</FILE><LINE>33</LINE></saida_portb>
+  <alternar><FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\2x7seg_counter_BCD\2x7seg_counter_BCD\main.asm</FILE><LINE>37</LINE></alternar>
+  <delay1000ms><FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\2x7seg_counter_BCD\2x7seg_counter_BCD\main.asm</FILE><LINE>61</LINE></delay1000ms>
+  <counter><FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\2x7seg_counter_BCD\2x7seg_counter_BCD\main.asm</FILE><LINE>46</LINE></counter>
+  <delay_loop><FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\2x7seg_counter_BCD\2x7seg_counter_BCD\main.asm</FILE><LINE>66</LINE></delay_loop>
  </LABELS>
 </ASSEMBLER_INFO>

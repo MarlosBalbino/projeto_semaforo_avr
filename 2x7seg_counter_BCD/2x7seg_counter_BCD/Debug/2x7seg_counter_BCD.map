@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.8  C:\Users\marlo\Documents\Atmel Studio\7.0\2x7seg_counter_BCD\2x7seg_counter_BCD\main.asm Thu Sep 18 18:02:32 2025
+AVRASM ver. 2.2.8  C:\Users\marlo\Documents\Atmel Studio\7.0\2x7seg_counter_BCD\2x7seg_counter_BCD\main.asm Thu Sep 25 23:00:28 2025
 
 
 EQU  SIGNATURE_000 0000001e
@@ -696,11 +696,11 @@ EQU  TWIaddr      00000030
 EQU  SPMRaddr     00000032
 EQU  INT_VECTORS_SIZE 00000034
 EQU  ClockMHz     00000010
-EQU  DelayMs      00000005
+EQU  DelayMs      00000064
 CSEG RESET        00000001
-CSEG counter      00000007
 CSEG send         00000007
 CSEG saida_portb  0000000c
 CSEG alternar     0000000d
 CSEG delay1000ms  00000017
+CSEG counter      00000011
 CSEG delay_loop   0000001a
