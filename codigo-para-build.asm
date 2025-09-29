@@ -5,19 +5,19 @@
 
 ; =============== Definição de nomes para registradores =============== 
 .def zero  = r1 
-.def units = r16
-.def tens  = r18
+.def units = r16 ; "unidades" -> para display 1
+.def tens  = r18 ; "dezenas"  -> para display 2
 
 .def temp   = r19 
 .def s2idx  = r20 ; Índice para tabela do semaforo 2
-.def sema12 = r21 ; semaforo 1 e 2
-.def sema34 = r22 ; semaforo 3 e 4
+.def sema12 = r21 ; estados dos semaforo 1 e 2 - 3 primeiros bits = semáforo 1 ; 3 bits seguintes = semáforo 2
+.def sema34 = r22 ; estados dos semaforo 3 e 4
 .def count  = r24 ; contador dos estados
 .def state  = r25 ; estado atual
 
 ; =============== Declaração de variáveis  ============================
-; Tempo de cada estado
-.equ T0 = 60
+; Tempo de transição cada estado
+.equ T0 = 60 ; EX.: "Estou no estado 0? Para ir para o estado 1, espere 60 s"
 .equ T1 = 4
 .equ T2 = 23
 .equ T3 = 4
@@ -29,6 +29,29 @@
 .equ T9 = 1
 
 ; Tabela de estados
+
+/* ... 
+001 = VERDE
+010 = AMARELO
+100 = VERMELHO
+
+Abaixo, por fins de praticidade, os estados estão em hexadecimal.
+
+Ex.: 
+
+0x0C14 = VERMELHO - VERDE - VERMELHO - AMARELO (estado 1 na máquina de estados)
+
+Primeiro byte = estado dos semáforos 1 e 2 (VERMELHO e VERDE nesta ordem)
+Segundo byte = estados dos semáforos 3 e 4 (VERMELHO e AMARELO nesta ordem)
+
+P.S.: dado a que a arquitetura do AVR usa de little-endian, em 'state_table' colocamos esses bytes (Primeiro byte e Segundo byte) na ordem inversa.
+
+Então na memória fica:
+
+0x140C
+
+*/
+
 state_table:
 	.dw 0x0C0C
 	.dw 0x140C ; 0x140C (este eh o verdadeiro)
@@ -49,24 +72,22 @@ s2timer:
 
 .equ NUM_S2TIMER = 3 ; número de posições na s2timer
 
-.equ ClockMHz = 16
+.equ ClockMHz = 16 
 .equ DelayMs  = 5 ; delay em milisegundos para rotina de delay
 
 #define CLOCK 16.0e6 ; clock speed
-#define DELAY 0.15 ; temporizador em segundos
+#define DELAY 1 ; temporizador em segundos - a cada DELAYS segundos, é gerada uma interrupção a qual decrementa o contador da mudança de estados.
 .equ PRESCALE = 0b100 ;/256 prescale
 .equ PRESCALE_DIV = 256
-.equ WGM = 0b0100 ; Waveform generation mode: CTC - you must ensure this value is between 0 and 65535
+.equ WGM = 0b0100 ; Waveform generation mode: CTC
 .equ TOP = int(0.5 + ((CLOCK/PRESCALE_DIV)*DELAY))
 .if TOP > 65535
-.error "TOP is out of range"
+.error "TOP is out of range" 
 .endif
 
 jmp RESET
 .org OC1Aaddr
 jmp OCI1A_Interrupt
-.org OC0Aaddr
-jmp OCI0A_Interrupt
 
 ; =============== Configuração inicial/Inicializações  ===============
 RESET:	
@@ -89,7 +110,7 @@ RESET:
 	ldi temp, high(RAMEND)
 	out SPH, temp
 
-	; Habilita as portas B, C e D
+	; Habilita as portas B, C e D como saída
 	ldi temp, 255 ; 0b1111111 - constante para setar os pinos como saida
 	out  DDRB,temp		
 	out  DDRC,temp	
@@ -117,35 +138,16 @@ RESET:
 	sbr temp, (1<<OCIE1A)
 	sts TIMSK1, temp
 
-	; === Configura Timer0 (CTC, OCR0A = 78 ~ 5ms, prescaler 1024) ===
-    ldi temp, 78            ; OCR0A = 78 ~= 5 ms com prescaler 1024
-    sts  OCR0A, temp
-
-	ldi temp, (1<<WGM01) 
-    sts  TCCR0A, temp
-	ldi temp, (1<<CS02) | (1<<CS00)
-    sts  TCCR0B, temp
-
-    ; habilita interrupção Compare Match A do Timer0
-    lds  temp, TIMSK0
-    sbr  temp, (1<<OCIE0A)
-    sts  TIMSK0, temp    
-
 	sei ; habilita interrupcoes globais
 
 ; =============== MAIN LOOP  =======================================
 main_loop:
 	
-	;rcall delay1000ms
-	;rcall Display_Alternate
+	rcall DisplayAlternate
+	rcall delay1000ms
 
 	cpi count, 0 ; quando o contador chegar a zero, passa pra o próximo estado
 	brne main_loop
-
-	; ---------- Desativa apenas a interrupção OCIE0A (Timer0 Compare A) ----------
-    lds  temp, TIMSK0
-    andi temp, ~(1<<OCIE0A)   ; limpa o bit OCIE0A
-    sts  TIMSK0, temp
 
 	; ========================= Switch Case para os estados   =================================================
 	cpi state, 0
@@ -178,10 +180,10 @@ main_loop:
 	cpi state, 9
 	breq state_9
 		
-	state_0:
+	state_0: ; "Estou no estado 0? Vou passar para o próximo estado."
 		ldi state,1
 		ldi count, T1
-		rjmp fiat
+		rjmp fiat ; ACENDA OS SEMÁFOROS - "fiat" é abreviação de "fiat lux", que signica "faça-se a luz" em latim, referencia a uma passagem em Genesis na criação da Terra.
 
 	state_1:
 		ldi state,2
@@ -245,15 +247,6 @@ main_loop:
 
 		lpm sema34, Z
 		out PORTC, sema34
-
-		; ---------- Reativa a interrupção OCIE0A ----------
-		; limpa qualquer flag pendente pra evitar chamada imediata
-		ldi  temp, (1<<OCF0A)
-		sts  TIFR0, temp
-
-		lds  temp, TIMSK0
-		ori  temp, (1<<OCIE0A)
-		sts  TIMSK0, temp
 
 		rjmp main_loop
 
@@ -324,7 +317,7 @@ NextS2State:
 		rcall LoadS2State ; carrega próximo timer do semáforo
 		ret
 
-OCI0A_Interrupt:
+DisplayAlternate:
     in   temp, SREG
     push temp
 
@@ -353,10 +346,10 @@ OCI0A_Interrupt:
 	end_isr:
 		pop  temp
 		out  SREG, temp
-		reti
+		ret
 
 ; =============== Rotina de delay  ===============
-/*delay1000ms:
+delay1000ms:
     ldi r26, byte3(ClockMHz * 1000 * DelayMs / 5)
     ldi r27, high(ClockMHz * 1000 * DelayMs / 5)
     ldi r28, low(ClockMHz * 1000 * DelayMs / 5)
@@ -366,4 +359,4 @@ delay_loop:
     sbci r27, 0
     sbci r26, 0
     brcc delay_loop
-    ret*/
+    ret
