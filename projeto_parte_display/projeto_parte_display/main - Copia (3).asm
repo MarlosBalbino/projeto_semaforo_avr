@@ -152,7 +152,7 @@ delay_loop:
 
 
 states: ; unidades dezenas
-    .db 0, 5 
+    .db 1, 0 
     .db 0, 4  
     .db 2, 3  
     .db 0, 4  

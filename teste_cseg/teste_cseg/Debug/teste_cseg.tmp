@@ -1,0 +1,30 @@
+<ASSEMBLER_INFO>
+ <VERSION>2.2.8</VERSION>
+ <DEVICE>"ATmega328P"</DEVICE>
+ <WORKING_DIR>c:\users\marlo\Documents\Atmel Studio\7.0\teste_cseg\teste_cseg\Debug</WORKING_DIR>
+ <INCLUDE_PATH>
+  <DIR>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc</DIR>
+  <DIR>C:\Program Files (x86)\Atmel\Studio\7.0\toolchain\avr8\avrassembler\Include</DIR>
+  <DIR></DIR>
+ </INCLUDE_PATH>
+ <SOURCE_FILE>c:\users\marlo\Documents\Atmel Studio\7.0\teste_cseg\teste_cseg\main.asm</SOURCE_FILE>
+ <INCLUDED_FILES>
+  <FILE>C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m328Pdef.inc</FILE>
+ </INCLUDED_FILES>
+ <OBJECT_FILES>
+  <FILE>c:\users\marlo\Documents\Atmel Studio\7.0\teste_cseg\teste_cseg\Debug\teste_cseg.obj</FILE>
+ </OBJECT_FILES>
+ <HEX_FILES>
+  <FILE>teste_cseg.hex</FILE>
+ </HEX_FILES>
+ <OUTPUT_FILES>
+  <FILE>teste_cseg.map</FILE>
+  <FILE>teste_cseg.lss</FILE>
+ </OUTPUT_FILES>
+ <LABELS>
+  <RESET><FILE>c:\users\marlo\Documents\Atmel Studio\7.0\teste_cseg\teste_cseg\main.asm</FILE><LINE>14</LINE></RESET>
+  <loop><FILE>c:\users\marlo\Documents\Atmel Studio\7.0\teste_cseg\teste_cseg\main.asm</FILE><LINE>22</LINE></loop>
+  <estado><FILE>c:\users\marlo\Documents\Atmel Studio\7.0\teste_cseg\teste_cseg\main.asm</FILE><LINE>69</LINE></estado>
+  <counter><FILE>c:\users\marlo\Documents\Atmel Studio\7.0\teste_cseg\teste_cseg\main.asm</FILE><LINE>56</LINE></counter>
+ </LABELS>
+</ASSEMBLER_INFO>

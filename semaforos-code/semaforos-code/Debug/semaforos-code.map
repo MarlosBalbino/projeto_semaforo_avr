@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.8  c:\users\marlo\Documents\Atmel Studio\7.0\semaforos-code\semaforos-code\main.asm Sat Sep 27 13:05:13 2025
+AVRASM ver. 2.2.8  C:\Users\marlo\Documents\Atmel Studio\7.0\semaforos-code\semaforos-code\main.asm Mon Sep 29 07:28:53 2025
 
 
 EQU  SIGNATURE_000 0000001e
@@ -695,13 +695,14 @@ EQU  ACIaddr      0000002e
 EQU  TWIaddr      00000030
 EQU  SPMRaddr     00000032
 EQU  INT_VECTORS_SIZE 00000034
-CSEG reset        00000020
-CSEG OCI1A_Interrupt 00000018
+DEF  zero         r1
+DEF  units        r16
+DEF  tens         r18
 DEF  temp         r19
-DEF  count        r24
-DEF  s2tempo      r20
+DEF  s2idx        r20
 DEF  sema12       r21
 DEF  sema34       r22
+DEF  count        r24
 DEF  state        r25
 EQU  T0           0000003c
 EQU  T1           00000004
@@ -713,22 +714,38 @@ EQU  T6           00000015
 EQU  T7           00000001
 EQU  T8           00000003
 EQU  T9           00000001
-CSEG estado       00000024
-EQU  TAMANHO_ARRAY 00000014
-EQU  ENDERECO_FINAL 00000038
+CSEG state_table  00000000
+CSEG s2timer      0000000a
+EQU  NUM_S2TIMER  00000003
+EQU  ClockMHz     00000010
+EQU  DelayMs      00000005
 EQU  PRESCALE     00000004
 EQU  PRESCALE_DIV 00000100
 EQU  WGM          00000004
-EQU  TOP          0000f424
-CSEG main_loop    0000004b
-CSEG state_0      00000061
-CSEG state_1      00000064
-CSEG state_2      00000067
-CSEG state_3      0000006a
-CSEG state_4      0000006d
-CSEG state_5      00000070
-CSEG state_6      00000073
-CSEG state_7      00000076
-CSEG state_8      00000079
-CSEG state_9      0000007c
-CSEG fiat         0000007f
+EQU  TOP          0000249f
+CSEG RESET        00000018
+CSEG OCI1A_Interrupt 0000007f
+CSEG LoadS2State  00000092
+CSEG main_loop    0000003e
+CSEG DisplayAlternate 000000a1
+CSEG delay1000ms  000000b0
+CSEG state_0      00000056
+CSEG state_1      00000059
+CSEG state_2      0000005c
+CSEG state_3      0000005f
+CSEG state_4      00000062
+CSEG state_5      00000065
+CSEG state_6      00000068
+CSEG state_7      0000006b
+CSEG state_8      0000006e
+CSEG state_9      00000071
+CSEG fiat         00000074
+CSEG units_is_zero 0000008a
+CSEG dec_units    00000088
+CSEG call_next_state 0000008d
+CSEG done_isr     0000008f
+CSEG NextS2State  0000009b
+CSEG skip_s2idx_reset 0000009f
+CSEG show_units   000000ab
+CSEG end_isr      000000ad
+CSEG delay_loop   000000b3

@@ -25,7 +25,7 @@
  <LABELS>
   <RESET><FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm</FILE><LINE>33</LINE></RESET>
   <TIM1_COMPA><FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm</FILE><LINE>97</LINE></TIM1_COMPA>
-  <LoadState><FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm</FILE><LINE>187</LINE></LoadState>
+  <LoadState><FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm</FILE><LINE>168</LINE></LoadState>
   <send_units><FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm</FILE><LINE>73</LINE></send_units>
   <send_tens><FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm</FILE><LINE>85</LINE></send_tens>
   <alternate><FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm</FILE><LINE>89</LINE></alternate>
@@ -33,9 +33,9 @@
   <do_units_decrement><FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm</FILE><LINE>113</LINE></do_units_decrement>
   <call_next_state><FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm</FILE><LINE>117</LINE></call_next_state>
   <done_isr><FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm</FILE><LINE>131</LINE></done_isr>
-  <NextState><FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm</FILE><LINE>205</LINE></NextState>
+  <NextState><FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm</FILE><LINE>186</LINE></NextState>
   <delay_loop><FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm</FILE><LINE>144</LINE></delay_loop>
-  <states><FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm</FILE><LINE>173</LINE></states>
-  <skip_idx_reset><FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm</FILE><LINE>210</LINE></skip_idx_reset>
+  <states><FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm</FILE><LINE>154</LINE></states>
+  <skip_idx_reset><FILE>C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm</FILE><LINE>191</LINE></skip_idx_reset>
  </LABELS>
 </ASSEMBLER_INFO>

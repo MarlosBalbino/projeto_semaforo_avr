@@ -1,5 +1,5 @@
 
-AVRASM ver. 2.2.8  C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm Fri Sep 26 15:08:45 2025
+AVRASM ver. 2.2.8  C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm Sun Sep 28 14:28:15 2025
 
 [builtin](2): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m328Pdef.inc'
 C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_display\main.asm(1): Including file 'C:/Program Files (x86)\Atmel\Studio\7.0\Packs\atmel\ATmega_DFP\1.7.374\avrasm\inc\m328pdef.inc'
@@ -1047,7 +1047,7 @@ C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_di
                                  .equ DelayMs = 5 ; delay em milisegundos para rotina de delay
                                  
                                  #define CLOCK 16.0e6 ;clock speed
-                                 #define DELAY 0.25 ; delay em secondos para a interrupção de timer
+                                 #define DELAY 1 ; delay em secondos para a interrupção de timer
                                  
                                  .equ PRESCALE = 0b100 ;/256 prescale8
                                  .equ PRESCALE_DIV = 256
@@ -1081,9 +1081,9 @@ C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_di
                                  	; ============== CONFIGURA O TIMER ====================================================
                                  	
                                  	; OCR1A = 62499 (0xF423) para 1s
-00001f e33d                      	ldi tmp, high(TOP)
+00001f ef34                      	ldi tmp, high(TOP)
 000020 9330 0089                 	sts OCR1AH, tmp
-000022 e038                      	ldi tmp, low(TOP)
+000022 e233                      	ldi tmp, low(TOP)
 000023 9330 0088                 	sts OCR1AL, tmp
                                  
                                  	; habilita interrupção Compare A
@@ -1181,27 +1181,8 @@ C:\Users\marlo\Documents\Atmel Studio\7.0\projeto_parte_display\projeto_parte_di
                                  
                                  
                                  
-                                 
-                                 
-                                 
-                                 
-                                 
-                                 
-                                 ; tabela com tempos apenas (por enquanto)
-                                 /*states: ; unidades dezenas
-                                     .db 0x06, 0x00 
-                                     .db 0x00, 0x04  
-                                     .db 0x02, 0x03  
-                                     .db 0x00, 0x04  
-                                 	.db 0x02, 0x00 
-                                 	.db 0x00, 0x03
-                                 	.db 0x02, 0x01
-                                 	.db 0x00, 0x01
-                                 	.db 0x00, 0x03
-                                 	.db 0x00, 0x01*/
-                                 
                                  states: ; unidades dezenas
-000052 0006                          .db 6, 0 
+000052 0500                          .db 0, 5 
 000053 0400                          .db 0, 4  
 000054 0302                          .db 2, 3  
 000055 0400                          .db 0, 4  

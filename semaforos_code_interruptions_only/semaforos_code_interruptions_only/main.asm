@@ -65,6 +65,8 @@ s2timer:
 jmp RESET
 .org OC1Aaddr
 jmp OCI1A_Interrupt
+.org OC0Aaddr
+jmp OCI0A_Interrupt
 
 ; =============== Configuração inicial/Inicializações  ===============
 RESET:	
@@ -115,16 +117,35 @@ RESET:
 	sbr temp, (1<<OCIE1A)
 	sts TIMSK1, temp
 
+	; === Configura Timer0 (CTC, OCR0A = 78 ~ 5ms, prescaler 1024) ===
+    ldi temp, 78            ; OCR0A = 78 ~= 5 ms com prescaler 1024
+    sts  OCR0A, temp
+
+	ldi temp, (1<<WGM01) 
+    sts  TCCR0A, temp
+	ldi temp, (1<<CS02) | (1<<CS00)
+    sts  TCCR0B, temp
+
+    ; habilita interrupção Compare Match A do Timer0
+    lds  temp, TIMSK0
+    sbr  temp, (1<<OCIE0A)
+    sts  TIMSK0, temp    
+
 	sei ; habilita interrupcoes globais
 
 ; =============== MAIN LOOP  =======================================
 main_loop:
 	
-	rcall DisplayAlternate
-	rcall delay1000ms
+	;rcall delay1000ms
+	;rcall Display_Alternate
 
 	cpi count, 0 ; quando o contador chegar a zero, passa pra o próximo estado
 	brne main_loop
+
+	; ---------- Desativa apenas a interrupção OCIE0A (Timer0 Compare A) ----------
+    lds  temp, TIMSK0
+    andi temp, ~(1<<OCIE0A)   ; limpa o bit OCIE0A
+    sts  TIMSK0, temp
 
 	; ========================= Switch Case para os estados   =================================================
 	cpi state, 0
@@ -225,6 +246,15 @@ main_loop:
 		lpm sema34, Z
 		out PORTC, sema34
 
+		; ---------- Reativa a interrupção OCIE0A ----------
+		; limpa qualquer flag pendente pra evitar chamada imediata
+		ldi  temp, (1<<OCF0A)
+		sts  TIFR0, temp
+
+		lds  temp, TIMSK0
+		ori  temp, (1<<OCIE0A)
+		sts  TIMSK0, temp
+
 		rjmp main_loop
 
 ; =============== Função via interrupção por timer  ===============
@@ -294,7 +324,7 @@ NextS2State:
 		rcall LoadS2State ; carrega próximo timer do semáforo
 		ret
 
-DisplayAlternate:
+OCI0A_Interrupt:
     in   temp, SREG
     push temp
 
@@ -323,10 +353,10 @@ DisplayAlternate:
 	end_isr:
 		pop  temp
 		out  SREG, temp
-		ret
+		reti
 
 ; =============== Rotina de delay  ===============
-delay1000ms:
+/*delay1000ms:
     ldi r26, byte3(ClockMHz * 1000 * DelayMs / 5)
     ldi r27, high(ClockMHz * 1000 * DelayMs / 5)
     ldi r28, low(ClockMHz * 1000 * DelayMs / 5)
@@ -336,4 +366,4 @@ delay_loop:
     sbci r27, 0
     sbci r26, 0
     brcc delay_loop
-    ret
+    ret*/
