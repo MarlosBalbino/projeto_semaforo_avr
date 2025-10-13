@@ -1,6 +1,6 @@
 <circuit version="1.1.0-SR1" rev="2005" stepSize="1000000000" stepsPS="1000" NLsteps="100000" reaStep="1000000" animate="0" >
 
-<item itemtype="MCU" CircId="mega328-4" mainComp="false" Show_id="true" Show_Val="false" Pos="-348,440" rotation="0" hflip="1" vflip="1" label="mega328-4" idLabPos="0,-20" labelrot="0" valLabPos="-16,20" valLabRot="0" Frequency="16 MHz" Program="../semaforos-code/semaforos-code/Debug/semaforos-code.hex" Auto_Load="true" saveEepr="true" Logic_Symbol="false" Rst_enabled="false" Ext_Osc="false" Wdt_enabled="false" Clk_Out="false" MainMcu="true" SerialMon="-1" />
+<item itemtype="MCU" CircId="mega328-4" mainComp="false" Show_id="true" Show_Val="false" Pos="-344,440" rotation="0" hflip="1" vflip="1" label="mega328-4" idLabPos="0,-20" labelrot="0" valLabPos="-16,20" valLabRot="0" Frequency="16 MHz" Program="simulide-executavel.hex" Auto_Load="true" saveEepr="true" Logic_Symbol="false" Rst_enabled="false" Ext_Osc="false" Wdt_enabled="false" Clk_Out="false" MainMcu="true" SerialMon="-1" />
 
 <item itemtype="Led" CircId="Led-29" mainComp="false" Show_id="false" Show_Val="false" Pos="-488,440" rotation="0" hflip="1" vflip="1" label="Led-29" idLabPos="-16,-24" labelrot="0" valLabPos="-16,20" valLabRot="0" Color="Yellow" Grounded="false" Threshold="2.4 V" MaxCurrent="30 mA" Resistance="0.6 Ω" />
 
@@ -100,6 +100,8 @@
 
 <item itemtype="Ground" CircId="Ground-124" mainComp="false" Show_id="false" Show_Val="false" Pos="-108,924" rotation="0" hflip="1" vflip="1" label="Ground-124" idLabPos="-16,8" labelrot="0" valLabPos="-16,20" valLabRot="0" />
 
+<item itemtype="SerialTerm" CircId="SerialTerm-130" mainComp="false" Show_id="false" Show_Val="false" Pos="-372,372" rotation="0" hflip="1" vflip="1" label="SerialTerm-130" idLabPos="-20,-32" labelrot="0" valLabPos="-16,20" valLabRot="0" Baudrate="9600 _Bd" DataBits="8 _bits" StopBits="1 _bits" SerialMon="false" />
+
 <item itemtype="Node" CircId="Node-36" mainComp="false" Pos="-452,464" />
 
 <item itemtype="Node" CircId="Node-37" mainComp="false" Pos="-452,440" />
@@ -170,9 +172,9 @@
 
 <item itemtype="Connector" uid="Connector-94" startpinid="Led-50-rPin" endpinid="Node-48-0" pointList="-84,644,-64,644" />
 
-<item itemtype="Connector" uid="Connector-106" startpinid="mega328-4-PORTB0" endpinid="Resistor-49-lPin" pointList="-356,552,-356,644,-172,644" />
+<item itemtype="Connector" uid="Connector-106" startpinid="mega328-4-PORTB0" endpinid="Resistor-49-lPin" pointList="-352,552,-352,644,-172,644" />
 
-<item itemtype="Connector" uid="Connector-107" startpinid="mega328-4-PORTB1" endpinid="Resistor-54-lPin" pointList="-308,552,-300,552,-300,636,-172,636" />
+<item itemtype="Connector" uid="Connector-107" startpinid="mega328-4-PORTB1" endpinid="Resistor-54-lPin" pointList="-304,552,-300,552,-300,636,-172,636" />
 
 <item itemtype="Connector" uid="Connector-128" startpinid="Node-68-2" endpinid="Ground-73-Gnd" pointList="-444,596,-444,616" />
 
@@ -188,15 +190,15 @@
 
 <item itemtype="Connector" uid="Connector-134" startpinid="Led-70-rPin" endpinid="Node-68-0" pointList="-464,596,-444,596" />
 
-<item itemtype="Connector" uid="Connector-135" startpinid="mega328-4-PORTC3" endpinid="Resistor-69-lPin" pointList="-308,464,-244,464,-244,316,-588,316,-588,596,-552,596" />
+<item itemtype="Connector" uid="Connector-135" startpinid="mega328-4-PORTC3" endpinid="Resistor-69-lPin" pointList="-304,464,-244,464,-244,316,-588,316,-588,596,-552,596" />
 
-<item itemtype="Connector" uid="Connector-137" startpinid="mega328-4-PORTC1" endpinid="Resistor-34-lPin" pointList="-308,480,-264,480,-264,328,-572,328,-572,456,-560,456" />
+<item itemtype="Connector" uid="Connector-137" startpinid="mega328-4-PORTC1" endpinid="Resistor-34-lPin" pointList="-304,480,-264,480,-264,328,-572,328,-572,456,-560,456" />
 
-<item itemtype="Connector" uid="Connector-138" startpinid="mega328-4-PORTC2" endpinid="Resistor-32-lPin" pointList="-308,472,-272,472,-272,332,-568,332,-568,448,-560,448" />
+<item itemtype="Connector" uid="Connector-138" startpinid="mega328-4-PORTC2" endpinid="Resistor-32-lPin" pointList="-304,472,-272,472,-272,332,-568,332,-568,448,-560,448" />
 
-<item itemtype="Connector" uid="Connector-139" startpinid="mega328-4-PORTC4" endpinid="Resistor-74-lPin" pointList="-308,456,-288,456,-288,308,-600,308,-600,588,-552,588" />
+<item itemtype="Connector" uid="Connector-139" startpinid="mega328-4-PORTC4" endpinid="Resistor-74-lPin" pointList="-304,456,-288,456,-288,308,-600,308,-600,588,-552,588" />
 
-<item itemtype="Connector" uid="Connector-140" startpinid="mega328-4-PORTC5" endpinid="Resistor-71-lPin" pointList="-308,448,-232,448,-232,300,-612,300,-612,580,-552,580" />
+<item itemtype="Connector" uid="Connector-140" startpinid="mega328-4-PORTC5" endpinid="Resistor-71-lPin" pointList="-304,448,-232,448,-232,300,-612,300,-612,580,-552,580" />
 
 <item itemtype="Connector" uid="Connector-148" startpinid="Node-79-2" endpinid="Node-83-1" pointList="64,776,64,800" />
 
@@ -210,19 +212,19 @@
 
 <item itemtype="Connector" uid="Connector-159" startpinid="Resistor-87-rPin" endpinid="Led-84-lPin" pointList="4,800,12,800" />
 
-<item itemtype="Connector" uid="Connector-166" startpinid="mega328-4-PORTB2" endpinid="Resistor-51-lPin" pointList="-308,544,-296,544,-296,628,-172,628" />
+<item itemtype="Connector" uid="Connector-166" startpinid="mega328-4-PORTB2" endpinid="Resistor-51-lPin" pointList="-304,544,-296,544,-296,628,-172,628" />
 
-<item itemtype="Connector" uid="Connector-167" startpinid="mega328-4-PORTB3" endpinid="Resistor-87-lPin" pointList="-308,536,-44,536,-44,800,-28,800" />
+<item itemtype="Connector" uid="Connector-167" startpinid="mega328-4-PORTB3" endpinid="Resistor-87-lPin" pointList="-304,536,-44,536,-44,800,-28,800" />
 
 <item itemtype="Connector" uid="Connector-168" startpinid="Led-85-lPin" endpinid="Resistor-89-rPin" pointList="12,776,12,792,4,792" />
 
-<item itemtype="Connector" uid="Connector-169" startpinid="mega328-4-PORTB4" endpinid="Resistor-89-lPin" pointList="-308,528,-36,528,-36,792,-28,792" />
+<item itemtype="Connector" uid="Connector-169" startpinid="mega328-4-PORTB4" endpinid="Resistor-89-lPin" pointList="-304,528,-36,528,-36,792,-28,792" />
 
 <item itemtype="Connector" uid="Connector-170" startpinid="Led-82-lPin" endpinid="Resistor-90-rPin" pointList="12,752,4,752,4,784" />
 
-<item itemtype="Connector" uid="Connector-171" startpinid="mega328-4-PORTB5" endpinid="Resistor-90-lPin" pointList="-308,520,-28,520,-28,784" />
+<item itemtype="Connector" uid="Connector-171" startpinid="mega328-4-PORTB5" endpinid="Resistor-90-lPin" pointList="-304,520,-28,520,-28,784" />
 
-<item itemtype="Connector" uid="Connector-136" startpinid="mega328-4-PORTC0" endpinid="Resistor-33-lPin" pointList="-308,488,-256,488,-256,324,-580,324,-580,464,-560,464" />
+<item itemtype="Connector" uid="Connector-136" startpinid="mega328-4-PORTC0" endpinid="Resistor-33-lPin" pointList="-304,488,-256,488,-256,324,-580,324,-580,464,-560,464" />
 
 <item itemtype="Connector" uid="Connector-172" startpinid="Seven Segment-101-pin_d" endpinid="Node-115-0" pointList="-92,780,-116,780,-116,708,-212,708" />
 
@@ -310,18 +312,22 @@
 
 <item itemtype="Connector" uid="Connector-221" startpinid="Seven Segment-101-pin_commona" endpinid="BJT-122-collector" pointList="-60,812,-60,844" />
 
-<item itemtype="Connector" uid="Connector-222" startpinid="mega328-4-PORTD0" endpinid="CD4511-102-D0" pointList="-356,456,-364,456,-364,684,-356,684" />
-
-<item itemtype="Connector" uid="Connector-223" startpinid="mega328-4-PORTD1" endpinid="CD4511-102-D1" pointList="-356,464,-372,464,-372,692,-356,692" />
-
-<item itemtype="Connector" uid="Connector-224" startpinid="mega328-4-PORTD2" endpinid="CD4511-102-D2" pointList="-356,472,-380,472,-380,700,-356,700" />
-
-<item itemtype="Connector" uid="Connector-225" startpinid="mega328-4-PORTD3" endpinid="CD4511-102-D3" pointList="-356,480,-388,480,-388,708,-356,708" />
-
-<item itemtype="Connector" uid="Connector-226" startpinid="mega328-4-PORTD6" endpinid="Resistor-118-lPin" pointList="-356,536,-396,536,-396,884,-140,884,-140,860,-124,860" />
-
-<item itemtype="Connector" uid="Connector-227" startpinid="Resistor-103-lPin" endpinid="mega328-4-PORTD7" pointList="-220,860,-404,860,-404,544,-356,544" />
+<item itemtype="Connector" uid="Connector-226" startpinid="mega328-4-PORTD6" endpinid="Resistor-118-lPin" pointList="-352,536,-396,536,-396,884,-140,884,-140,860,-124,860" />
 
 <item itemtype="Connector" uid="Connector-127" startpinid="Resistor-71-rPin" endpinid="Led-72-lPin" pointList="-520,580,-504,580,-504,548,-496,548" />
+
+<item itemtype="Connector" uid="Connector-231" startpinid="mega328-4-PORTD5" endpinid="CD4511-102-D3" pointList="-352,528,-388,528,-388,708,-356,708" />
+
+<item itemtype="Connector" uid="Connector-235" startpinid="mega328-4-PORTD4" endpinid="CD4511-102-D2" pointList="-352,488,-380,488,-380,700,-356,700" />
+
+<item itemtype="Connector" uid="Connector-239" startpinid="mega328-4-PORTD3" endpinid="CD4511-102-D1" pointList="-352,480,-372,480,-372,692,-356,692" />
+
+<item itemtype="Connector" uid="Connector-243" startpinid="mega328-4-PORTD2" endpinid="CD4511-102-D0" pointList="-352,472,-364,472,-364,684,-356,684" />
+
+<item itemtype="Connector" uid="Connector-227" startpinid="Resistor-103-lPin" endpinid="mega328-4-PORTD7" pointList="-220,860,-404,860,-404,544,-352,544" />
+
+<item itemtype="Connector" uid="Connector-244" startpinid="SerialTerm-130-pin1" endpinid="mega328-4-PORTD1" pointList="-396,380,-404,380,-404,464,-352,464" />
+
+<item itemtype="Connector" uid="Connector-245" startpinid="SerialTerm-130-pin0" endpinid="mega328-4-PORTD0" pointList="-396,364,-412,364,-412,456,-352,456" />
 
 </circuit>
